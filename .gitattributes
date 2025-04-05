@@ -1,0 +1,85 @@
+# Set default behavior to automatically normalize line endings
+* text=auto
+
+# Swift source files
+*.swift text diff=swift
+*.h text diff=objc
+*.m text diff=objc
+*.mm text diff=objc
+
+# Xcode project files
+*.pbxproj text -merge=union
+*.xcworkspacedata text
+*.xcsettings text
+*.xcscheme text
+*.plist text
+
+# Image files treated as binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.icns binary
+*.pdf binary
+
+# Audio/video files treated as binary
+*.wav binary
+*.mp3 binary
+*.mp4 binary
+*.mov binary
+*.m4a binary
+
+# 3D Model files (Blender and related formats)
+*.blend binary
+*.blend1 binary
+*.blend2 binary
+*.fbx binary
+*.obj text
+*.mtl text
+*.dae binary
+*.3ds binary
+*.glb binary
+*.gltf text
+*.usdz binary
+*.stl binary
+*.ply binary
+*.reality binary
+
+# Texture and material files
+*.tga binary
+*.tif binary
+*.tiff binary
+*.hdr binary
+*.exr binary
+*.dds binary
+*.psd binary
+*.sbsar binary
+
+# Unity-related asset files (if used with your Swift project)
+*.unity binary
+*.prefab binary
+*.asset binary
+*.meta text
+*.mat binary
+*.anim binary
+*.controller binary
+
+# Compression and archive formats
+*.zip binary
+*.rar binary
+*.7z binary
+*.tar binary
+*.gz binary
+
+# Fonts
+*.ttf binary
+*.otf binary
+
+# Other Swift-related files
+*.xcassets merge=union
+*.strings text diff=localization
+*.stringsdict text diff=plist
+
+# Unity scenes and Blender asset files
+**/Assets/** filter=lfs diff=lfs merge=lfs -text
