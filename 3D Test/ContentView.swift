@@ -14,35 +14,31 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             BackgroundView()
+            
             VStack {
-                CityTextView(cityName: "Level 1")
+                CurrentLevelView(levelName: "Level 1")
                     .padding()
-                // Pass isNight to MainWeatherStatusView
-                MainWeatherStatusView(imageName: "cloud.sun.fill", temperature: "SMP25", isNight: isNight)
+ 
+                Main3DView(modelName: "mario_ac")
                     .padding()
                 
                 HStack(spacing: 20) {
-                    forecastDay(dayOfWeek: "Lvl 1", icon: "cloud.sun.fill", temp: 12)
-                    forecastDay(dayOfWeek: "Lvl 2", icon: "sun.max.fill", temp: 29)
-                    forecastDay(dayOfWeek: "Lvl 3", icon: "wind", temp: 14)
-                    forecastDay(dayOfWeek: "Lvl 4", icon: "sun.rain.fill", temp: 23)
-                    forecastDay(dayOfWeek: "Lvl 5", icon: "moon.stars.fill", temp: 6)
+                    levelForecast(dayOfWeek: "Lvl 1", icon: "cloud.sun.fill", temp: 12)
+                    levelForecast(dayOfWeek: "Lvl 2", icon: "sun.max.fill", temp: 29)
+                    levelForecast(dayOfWeek: "Lvl 3", icon: "wind", temp: 14)
+                    levelForecast(dayOfWeek: "Lvl 4", icon: "sun.rain.fill", temp: 23)
+                    levelForecast(dayOfWeek: "Lvl 5", icon: "moon.stars.fill", temp: 6)
                 }
                 .padding()
-                                
-                Button {
-                    isNight.toggle()
-                    print("isNight is now: \(isNight)")
-                } label: {
-                    WeatherButton(title: "Power Up")
-                }
+                      
+                PowerUpButton(title: "Power Up")
                 
                 Spacer()
             }
         }
     }
     
-    private func forecastDay(dayOfWeek: String, icon: String, temp: Int) -> some View {
+    private func levelForecast(dayOfWeek: String, icon: String, temp: Int) -> some View {
         VStack {
             Text(dayOfWeek)
                 .font(.system(size: 16, weight: .medium))
@@ -60,55 +56,3 @@ struct ContentView: View {
         }
     }
 }
-
-//struct BackgroundView: View {
-//    var body: some View {
-//
-//        LinearGradient(gradient: Gradient(colors: [.white, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing)
-//            .edgesIgnoringSafeArea(.all)
-//    }
-//}
-struct BackgroundView: View {
-    var body: some View {
-        Image("level1")
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-            .edgesIgnoringSafeArea(.all)
-    }
-}
-
-
-// Updated CityTextView with white background
-struct CityTextView: View {
-    var cityName: String
-    
-    var body: some View {
-        Text(cityName)
-            .font(.system(size: 32, weight: .medium, design: .default))
-            .foregroundColor(.red)
-            .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.white.opacity(0.8))
-                    .shadow(radius: 2)
-            )
-    }
-}
-
-struct MainWeatherStatusView: View {
-    var imageName: String
-    var temperature: String
-    var isNight: Bool
-    
-    var body: some View {
-        VStack(spacing: 10) {
-            // Use the Model3DView with the correct model name
-            Model3DView(modelName: "mario_ac", isNight: isNight)
-                .background(Color.clear)
-                .frame(width: 250, height: 250) // Made even larger for better visibility
-            
-        }
-        .background(Color.clear)
-    }
-}
-

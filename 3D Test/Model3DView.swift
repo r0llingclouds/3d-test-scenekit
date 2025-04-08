@@ -11,30 +11,22 @@ import SceneKit
 struct Model3DView: View {
     // Create the scene that will hold our 3D content
     let scene = SCNScene()
-    
-    // Controls whether we use dark or light materials
-    var isNight: Bool
-    
+        
     // Name of the 3D model file (without extension)
     var modelName: String
     
     // Initialize with model name and night mode state
-    init(modelName: String, isNight: Bool) {
+    init(modelName: String) {
         self.modelName = modelName
-        self.isNight = isNight
         setupScene()
     }
     
     var body: some View {
         ZStack {
-            // Make the background transparent
-            Color.clear
-            
             // Use custom SceneView with transparent background
-            CustomModelSceneView(scene: scene, isNight: isNight)
+            CustomModelSceneView(scene: scene)
                 .frame(width: 360, height: 360)
         }
-        .frame(width: 360, height: 360)
     }
     
     private func setupScene() {
@@ -151,10 +143,8 @@ struct Model3DView: View {
         var materials = [SCNMaterial]()
         
         // Choose colors based on isNight state
-        let colors: [UIColor] = isNight
-            ? [.darkGray, .lightGray, .systemIndigo, .systemTeal, .darkGray, .systemBlue]
-            : [.systemBlue, .systemYellow, .systemGreen, .systemOrange, .systemPurple, .systemPink]
-        
+        let colors: [UIColor] = [.darkGray, .lightGray, .systemIndigo, .systemTeal, .darkGray, .systemBlue]
+
         for color in colors {
             let material = SCNMaterial()
             material.diffuse.contents = color
@@ -177,39 +167,39 @@ struct Model3DView: View {
         scene.rootNode.addChildNode(cubeNode)
     }
     
-    private func applyMaterials(to node: SCNNode) {
-        // Colors to use based on day/night mode
-        let baseColor = isNight ? UIColor.darkGray : UIColor.systemBlue
-        let accentColor = isNight ? UIColor.systemIndigo : UIColor.systemTeal
-        
-        // Apply materials to the node and its children
-        applyColorRecursively(to: node, baseColor: baseColor, accentColor: accentColor)
-    }
-    
-    private func applyColorRecursively(to node: SCNNode, baseColor: UIColor, accentColor: UIColor, depth: Int = 0) {
-        // If this node has geometry, apply material
-        if let geometry = node.geometry {
-            let material = SCNMaterial()
-            // Alternate between base and accent colors based on depth
-            material.diffuse.contents = depth % 2 == 0 ? baseColor : accentColor
-            material.specular.contents = UIColor.white
-            material.shininess = 0.7
-            
-            // Apply to all geometry materials
-            geometry.materials = [material]
-        }
-        
-        // Recursively apply to child nodes
-        for (index, childNode) in node.childNodes.enumerated() {
-            applyColorRecursively(to: childNode, baseColor: baseColor, accentColor: accentColor, depth: depth + index)
-        }
-    }
+    // to tweak the colors of the model
+//    private func applyMaterials(to node: SCNNode) {
+//        // Colors to use based on day/night mode
+//        let baseColor = isNight ? UIColor.darkGray : UIColor.systemBlue
+//        let accentColor = isNight ? UIColor.systemIndigo : UIColor.systemTeal
+//        
+//        // Apply materials to the node and its children
+//        applyColorRecursively(to: node, baseColor: baseColor, accentColor: accentColor)
+//    }
+//    
+//    private func applyColorRecursively(to node: SCNNode, baseColor: UIColor, accentColor: UIColor, depth: Int = 0) {
+//        // If this node has geometry, apply material
+//        if let geometry = node.geometry {
+//            let material = SCNMaterial()
+//            // Alternate between base and accent colors based on depth
+//            material.diffuse.contents = depth % 2 == 0 ? baseColor : accentColor
+//            material.specular.contents = UIColor.white
+//            material.shininess = 0.7
+//            
+//            // Apply to all geometry materials
+//            geometry.materials = [material]
+//        }
+//        
+//        // Recursively apply to child nodes
+//        for (index, childNode) in node.childNodes.enumerated() {
+//            applyColorRecursively(to: childNode, baseColor: baseColor, accentColor: accentColor, depth: depth + index)
+//        }
+//    }
 }
 
 // Custom UIViewRepresentable wrapper for SCNView
 struct CustomModelSceneView: UIViewRepresentable {
     var scene: SCNScene
-    var isNight: Bool
     
     func makeUIView(context: Context) -> SCNView {
         // Create SceneView with appropriate options
@@ -219,7 +209,6 @@ struct CustomModelSceneView: UIViewRepresentable {
         scnView.scene = scene
         scnView.allowsCameraControl = true
         scnView.autoenablesDefaultLighting = true
-        scnView.backgroundColor = UIColor.clear
         scnView.isJitteringEnabled = true
         scnView.preferredFramesPerSecond = 60
         
@@ -227,10 +216,9 @@ struct CustomModelSceneView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: SCNView, context: Context) {
-        // Update any view properties if needed
+
         uiView.backgroundColor = UIColor.clear
         
-        // Ensure scene's background is clear
         if let scene = uiView.scene {
             scene.background.contents = UIColor.clear
         }

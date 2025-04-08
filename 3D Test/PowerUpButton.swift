@@ -8,13 +8,13 @@
 import Foundation
 import SwiftUI
 
-struct WeatherButton: View {
+struct PowerUpButton: View {
     
     var title: String
     
     var body: some View {
         Button(action: {
-            // Action for your button
+            print("Power up!")
         }) {
             Text(title)
                 .frame(width: 280, height: 50)
