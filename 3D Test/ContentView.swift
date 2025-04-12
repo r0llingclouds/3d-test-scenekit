@@ -19,7 +19,7 @@ struct ContentView: View {
                 CurrentLevelView(levelName: "Level 1")
                     .padding()
  
-                Main3DView(modelName: "mario_ac")
+                Model3DView(modelName: "Pixel_Anime_Character_Female")
                     .padding()
                 
                 HStack(spacing: 20) {

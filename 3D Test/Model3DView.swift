@@ -1,32 +1,34 @@
 //
-//  Model3DView.swift
+//  Merged3DView.swift
 //  3D Test
 //
-//  Created by Tirso López Ausens on 5/4/25.
+//  Created by Tirso López Ausens on 12/4/25.
 //
 
 import SwiftUI
 import SceneKit
 
 struct Model3DView: View {
-    // Create the scene that will hold our 3D content
+    // Scene that will hold our 3D content
     let scene = SCNScene()
-        
+    
     // Name of the 3D model file (without extension)
     var modelName: String
     
-    // Initialize with model name and night mode state
+    // Initialize with model name
     init(modelName: String) {
         self.modelName = modelName
         setupScene()
     }
     
     var body: some View {
-        ZStack {
+        VStack(spacing: 10) {
             // Use custom SceneView with transparent background
             CustomModelSceneView(scene: scene)
-                .frame(width: 360, height: 360)
+                .background(Color.clear)
+                .frame(width: 250, height: 250)
         }
+        .background(Color.clear)
     }
     
     private func setupScene() {
@@ -39,7 +41,7 @@ struct Model3DView: View {
         // Set up a camera - position it further back
         let cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
-        cameraNode.position = SCNVector3(0, 0, 0) // Moved further back to see more of the scene
+        cameraNode.position = SCNVector3(0, 2, 0) // Moved further back to see more of the scene
         cameraNode.eulerAngles = SCNVector3(0, 0, 0) // Look directly at model
         scene.rootNode.addChildNode(cameraNode)
         
@@ -61,16 +63,16 @@ struct Model3DView: View {
     
     private func loadModel() {
         // Print debug info about available resources
-        print("🔍 Searching for model: \(modelName).dae")
+        print("🔍 Searching for model: \(modelName).usdz")
         print("📦 Bundle path: \(Bundle.main.bundlePath)")
         
-        // List all DAE files in the bundle
-        let allDaeFiles = Bundle.main.paths(forResourcesOfType: "dae", inDirectory: nil)
-        print("📋 All DAE files in bundle: \(allDaeFiles)")
+        // List all USDZ files in the bundle
+        let allUsdzFiles = Bundle.main.paths(forResourcesOfType: "usdz", inDirectory: nil)
+        print("📋 All USDZ files in bundle: \(allUsdzFiles)")
         
         // Try to load the model from the bundle
-        guard let modelUrl = Bundle.main.url(forResource: modelName, withExtension: "dae") else {
-            print("❌ Failed to find model: \(modelName).dae")
+        guard let modelUrl = Bundle.main.url(forResource: modelName, withExtension: "usdz") else {
+            print("❌ Failed to find model: \(modelName).usdz")
             
             // Create a fallback cube model since the file wasn't found
             createFallbackCube()
@@ -103,11 +105,6 @@ struct Model3DView: View {
             
             // fix initial rotation
             modelNode.eulerAngles = SCNVector3(0, 0, 0)
-            
-            
-            // Preserve the original materials instead of overriding them
-            // Commenting out material application to use the model's original materials
-            // applyMaterials(to: modelNode)
             
             // Add rotation animation
             let rotationAction = SCNAction.rotate(by: CGFloat(Float.pi) * 2, around: SCNVector3(0, 1, 0), duration: 8.0)
@@ -142,7 +139,7 @@ struct Model3DView: View {
         // Create different materials for each face
         var materials = [SCNMaterial]()
         
-        // Choose colors based on isNight state
+        // Choose colors
         let colors: [UIColor] = [.darkGray, .lightGray, .systemIndigo, .systemTeal, .darkGray, .systemBlue]
 
         for color in colors {
@@ -166,35 +163,6 @@ struct Model3DView: View {
         // Add the cube to the scene
         scene.rootNode.addChildNode(cubeNode)
     }
-    
-    // to tweak the colors of the model
-//    private func applyMaterials(to node: SCNNode) {
-//        // Colors to use based on day/night mode
-//        let baseColor = isNight ? UIColor.darkGray : UIColor.systemBlue
-//        let accentColor = isNight ? UIColor.systemIndigo : UIColor.systemTeal
-//        
-//        // Apply materials to the node and its children
-//        applyColorRecursively(to: node, baseColor: baseColor, accentColor: accentColor)
-//    }
-//    
-//    private func applyColorRecursively(to node: SCNNode, baseColor: UIColor, accentColor: UIColor, depth: Int = 0) {
-//        // If this node has geometry, apply material
-//        if let geometry = node.geometry {
-//            let material = SCNMaterial()
-//            // Alternate between base and accent colors based on depth
-//            material.diffuse.contents = depth % 2 == 0 ? baseColor : accentColor
-//            material.specular.contents = UIColor.white
-//            material.shininess = 0.7
-//            
-//            // Apply to all geometry materials
-//            geometry.materials = [material]
-//        }
-//        
-//        // Recursively apply to child nodes
-//        for (index, childNode) in node.childNodes.enumerated() {
-//            applyColorRecursively(to: childNode, baseColor: baseColor, accentColor: accentColor, depth: depth + index)
-//        }
-//    }
 }
 
 // Custom UIViewRepresentable wrapper for SCNView
@@ -216,7 +184,6 @@ struct CustomModelSceneView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: SCNView, context: Context) {
-
         uiView.backgroundColor = UIColor.clear
         
         if let scene = uiView.scene {
