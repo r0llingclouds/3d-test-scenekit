@@ -1,4 +1,4 @@
-# 3D Test
+# 3D Test with SceneKit and SwiftUI
 
 <p align="center">
   <img src="3D Test/Resources/readme_logo.png" alt="3D Test Logo" width="550"/>
